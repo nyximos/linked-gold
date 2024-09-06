@@ -5,6 +5,7 @@
 /auth-service/.gradle
 !/auth-service/gradle/wrapper/gradle-wrapper.jar
 /auth-service/.idea
+.idea
 
 ### Build ###
 build/
