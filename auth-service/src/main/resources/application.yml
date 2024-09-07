@@ -2,7 +2,8 @@ server:
   port: ${SERVER_PORT:8888}
 
 grpc:
-  port: ${GRPC_PORT:50051}
+  server:
+    port: ${GRPC_PORT:50051}
 
 spring:
   application:
