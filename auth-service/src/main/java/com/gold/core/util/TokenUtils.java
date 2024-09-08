@@ -1,4 +1,4 @@
-package com.gold.auth.core.util;
+package com.gold.core.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

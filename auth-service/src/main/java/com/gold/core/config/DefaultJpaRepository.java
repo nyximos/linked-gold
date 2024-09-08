@@ -1,4 +1,4 @@
-package com.gold.auth.core.config;
+package com.gold.core.config;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

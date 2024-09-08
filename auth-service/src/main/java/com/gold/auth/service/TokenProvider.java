@@ -1,7 +1,7 @@
 package com.gold.auth.service;
 
 
-import com.gold.auth.core.util.TokenUtils;
+import com.gold.core.util.TokenUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;

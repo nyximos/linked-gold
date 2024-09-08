@@ -1,4 +1,4 @@
-package com.gold.auth.core.config;
+package com.gold.core.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
