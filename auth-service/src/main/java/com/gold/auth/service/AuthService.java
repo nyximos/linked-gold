@@ -5,6 +5,7 @@ import com.nyximos.auth.AuthServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,21 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
                 .build();
 
         responseObserver.onNext(tokenResponse);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void validateToken(Auth.ValidateTokenRequest request, StreamObserver<Auth.ValidateTokenResponse> responseObserver) {
+        String accessToken = tokenProvider.removePrefix(request.getAccessToken());
+
+        boolean isValid = tokenProvider.validateToken(accessToken);
+
+        Auth.ValidateTokenResponse response = Auth.ValidateTokenResponse.newBuilder()
+                .setIsValid(isValid)
+                .setUsername(isValid ? tokenProvider.extractUsername(accessToken) : StringUtils.EMPTY)
+                .build();
+
+        responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 }
