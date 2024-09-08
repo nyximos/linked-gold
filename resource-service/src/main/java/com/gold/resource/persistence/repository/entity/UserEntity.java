@@ -1,10 +1,7 @@
 package com.gold.resource.persistence.repository.entity;
 
-import com.gold.core.util.EncryptUtils;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.security.NoSuchAlgorithmException;
 
 @Getter
 @Entity
@@ -26,10 +23,6 @@ public class UserEntity extends BaseEntity {
     private String password;
 
     public void updatePassword(String rawPassword) {
-        try {
-            this.password = EncryptUtils.encryptSHA256(rawPassword);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Failed to encrypt password", e);
-        }
+        this.password = rawPassword;
     }
 }

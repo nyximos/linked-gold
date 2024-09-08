@@ -24,6 +24,9 @@ def lombokMapStructBindingVersion = '0.2.0'
 def grpcVersion = '1.66.0'
 def protobufVersion = '4.28.0'
 def grpcSpringBootStarterVersion = '2.15.0.RELEASE'
+def commonLangVersion = '3.15.0'
+def jsonVersion = '20240303'
+def jjwtVersion = '0.12.6'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -58,9 +61,14 @@ dependencies {
 
     implementation 'io.github.cdimascio:dotenv-java:2.2.0'
 
-    tasks.named('test') {
-        useJUnitPlatform()
-    }
+    implementation "org.apache.commons:commons-lang3:${commonLangVersion}"
+
+    implementation "org.json:json:${jsonVersion}"
+
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+
 }
 
 tasks.named('test') {

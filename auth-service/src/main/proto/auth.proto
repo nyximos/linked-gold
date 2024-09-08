@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package com.nyximos.auth;
+
+service AuthService {
+  rpc CreateToken (TokenRequest) returns (TokenResponse);
+}
+
+message TokenRequest {
+  string username = 1;
+}
+
+message TokenResponse {
+  string accessToken = 1;
+}
