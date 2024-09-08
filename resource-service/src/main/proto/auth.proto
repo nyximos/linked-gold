@@ -4,6 +4,8 @@ package com.nyximos.auth;
 
 service AuthService {
   rpc CreateToken (TokenRequest) returns (TokenResponse);
+  rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+
 }
 
 message TokenRequest {
@@ -12,4 +14,13 @@ message TokenRequest {
 
 message TokenResponse {
   string accessToken = 1;
+}
+
+message ValidateTokenRequest {
+  string accessToken = 1;
+}
+
+message ValidateTokenResponse {
+  bool isValid = 1;
+  string username = 2;
 }
