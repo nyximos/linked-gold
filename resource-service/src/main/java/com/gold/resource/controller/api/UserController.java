@@ -1,17 +1,20 @@
 package com.gold.resource.controller.api;
 
+import com.gold.client.AuthClient;
 import com.gold.core.wrapper.ResultResponse;
+import com.gold.core.wrapper.TokenUser;
 import com.gold.resource.controller.model.request.LoginRequestModel;
 import com.gold.resource.controller.model.request.SignUpRequestModel;
 import com.gold.resource.controller.model.response.TokenModel;
 import com.gold.resource.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
+import static com.gold.core.constant.ResourceConstants.TOKEN_USER;
+
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/apis/users")
@@ -30,4 +33,10 @@ public class UserController {
         return new ResultResponse(userService.signIn(loginRequestModel));
     }
 
+
+    @GetMapping("/token")
+    public ResultResponse<Void> test(@RequestAttribute(value = TOKEN_USER) TokenUser tokenUser) {
+        System.out.println("Username: " + tokenUser.getEmail());
+        return new ResultResponse<>();
+    }
 }

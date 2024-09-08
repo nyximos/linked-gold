@@ -41,7 +41,7 @@ public class TokenProvider {
                         .compact();
     }
 
-    public Claims parseJwt(String token) {
+    private Claims parseJwt(String token) {
         return TokenUtils.extractAllClaims(TokenUtils.getSecretKey(key),token);
     }
 
@@ -50,7 +50,7 @@ public class TokenProvider {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Date extractExpiration(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
@@ -63,11 +63,19 @@ public class TokenProvider {
         return extractExpiration(token).before(new Date());
     }
 
-    private String removePrefix(String token) {
+    public String removePrefix(String token) {
         if (token.startsWith(tokenPrefix + StringUtils.SPACE)) {
             return token.substring(tokenPrefix.length() + 1);
         }
         return token;
     }
 
+    public boolean validateToken(String token) {
+        try {
+            Claims claims = parseJwt(token);
+            return !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

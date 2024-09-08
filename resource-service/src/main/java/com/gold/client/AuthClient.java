@@ -25,4 +25,12 @@ public class AuthClient {
         Auth.TokenResponse response = authServiceStub.createToken(request);
         return response.getAccessToken();
     }
+
+    public Auth.ValidateTokenResponse validateToken(String accessToken) {
+        Auth.ValidateTokenRequest request = Auth.ValidateTokenRequest.newBuilder()
+                .setAccessToken(accessToken)
+                .build();
+        Auth.ValidateTokenResponse response = authServiceStub.validateToken(request);
+        return response;
+    }
 }
