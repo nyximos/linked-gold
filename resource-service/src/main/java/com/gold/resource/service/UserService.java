@@ -1,5 +1,6 @@
 package com.gold.resource.service;
 
+import com.gold.client.AuthClient;
 import com.gold.resource.controller.model.request.LoginRequestModel;
 import com.gold.resource.controller.model.request.SignUpRequestModel;
 import com.gold.resource.controller.model.response.TokenModel;
@@ -22,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final LoginValidateDelegator loginValidateDelegator;
     private final PasswordEncoder passwordEncoder;
+    private final AuthClient authClient;
 
     @Transactional
     public void signUp(SignUpRequestModel signUpRequestModel) {
@@ -33,7 +35,6 @@ public class UserService {
 
     public TokenModel signIn(LoginRequestModel loginRequestModel) {
         loginValidateDelegator.validate(loginRequestModel);
-        // Todo gRPC
-        return null;
+        return new TokenModel(authClient.createToken(loginRequestModel.getEmail()));
     }
 }
