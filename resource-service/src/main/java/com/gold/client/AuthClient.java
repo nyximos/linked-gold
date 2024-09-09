@@ -18,12 +18,12 @@ public class AuthClient {
         authServiceStub = AuthServiceGrpc.newBlockingStub(channel);
     }
 
-    public String createToken(String username) {
+    public Auth.TokenResponse createToken(String username) {
         Auth.TokenRequest request = Auth.TokenRequest.newBuilder()
                 .setUsername(username)
                 .build();
         Auth.TokenResponse response = authServiceStub.createToken(request);
-        return response.getAccessToken();
+        return response;
     }
 
     public Auth.ValidateTokenResponse validateToken(String accessToken) {
