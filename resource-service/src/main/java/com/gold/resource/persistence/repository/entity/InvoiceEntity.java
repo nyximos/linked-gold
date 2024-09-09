@@ -26,13 +26,16 @@ public class InvoiceEntity {
     @Column(name = "amount", nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
 
+    @Column(name = "unit_price", nullable = false, precision = 19, scale = 2)
+    private BigDecimal unit_price;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 30, nullable = false)
-    private OrderStatus status;
+    @Column(name = "order_status", length = 30, nullable = false)
+    private OrderStatus orderStatus;
 
     @Column(name = "customer_id", nullable = false)
     private Long customerId;
 
-    @Column(name = "product_id", nullable = false)
-    private BigDecimal productId;
+    @Column(name = "gold_id", nullable = false)
+    private Long goldId;
 }
