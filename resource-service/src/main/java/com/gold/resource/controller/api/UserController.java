@@ -1,11 +1,10 @@
 package com.gold.resource.controller.api;
 
-import com.gold.client.AuthClient;
 import com.gold.core.wrapper.ResultResponse;
-import com.gold.core.wrapper.TokenUser;
 import com.gold.resource.controller.model.request.LoginRequestModel;
 import com.gold.resource.controller.model.request.SignUpRequestModel;
 import com.gold.resource.controller.model.response.TokenModel;
+import com.gold.resource.service.TokenService;
 import com.gold.resource.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

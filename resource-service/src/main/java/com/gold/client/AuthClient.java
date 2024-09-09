@@ -33,4 +33,11 @@ public class AuthClient {
         Auth.ValidateTokenResponse response = authServiceStub.validateToken(request);
         return response;
     }
+
+    public Auth.TokenResponse reIssueToken(String refreshToken) {
+        Auth.ReIssueTokenRequest request = Auth.ReIssueTokenRequest.newBuilder()
+                .setRefreshToken(refreshToken)
+                .build();
+        return authServiceStub.reIssueToken(request);
+    }
 }
