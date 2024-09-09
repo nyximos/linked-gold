@@ -4,6 +4,7 @@ import com.gold.client.AuthClient;
 import com.gold.resource.controller.model.request.LoginRequestModel;
 import com.gold.resource.controller.model.request.SignUpRequestModel;
 import com.gold.resource.controller.model.response.TokenModel;
+import com.gold.resource.converter.TokenConverter;
 import com.gold.resource.converter.UserConverter;
 import com.gold.resource.persistence.repository.UserRepository;
 import com.gold.resource.persistence.repository.entity.UserEntity;
@@ -24,6 +25,7 @@ public class UserService {
     private final LoginValidateDelegator loginValidateDelegator;
     private final PasswordEncoder passwordEncoder;
     private final AuthClient authClient;
+    private final TokenConverter tokenConverter;
 
     @Transactional
     public void signUp(SignUpRequestModel signUpRequestModel) {
@@ -35,6 +37,6 @@ public class UserService {
 
     public TokenModel signIn(LoginRequestModel loginRequestModel) {
         loginValidateDelegator.validate(loginRequestModel);
-        return new TokenModel(authClient.createToken(loginRequestModel.getEmail()));
+        return tokenConverter.convert(authClient.createToken(loginRequestModel.getEmail()));
     }
 }

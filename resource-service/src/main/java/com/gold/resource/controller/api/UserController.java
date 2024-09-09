@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import static com.gold.core.constant.ResourceConstants.TOKEN_USER;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -33,10 +31,4 @@ public class UserController {
         return new ResultResponse(userService.signIn(loginRequestModel));
     }
 
-
-    @GetMapping("/token")
-    public ResultResponse<Void> test(@RequestAttribute(value = TOKEN_USER) TokenUser tokenUser) {
-        System.out.println("Username: " + tokenUser.getEmail());
-        return new ResultResponse<>();
-    }
 }
