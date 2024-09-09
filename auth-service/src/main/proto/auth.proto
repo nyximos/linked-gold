@@ -5,6 +5,7 @@ package com.nyximos.auth;
 service AuthService {
   rpc CreateToken (TokenRequest) returns (TokenResponse);
   rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+  rpc ReIssueToken (ReIssueTokenRequest) returns (TokenResponse);
 
 }
 
@@ -23,5 +24,9 @@ message ValidateTokenRequest {
 
 message ValidateTokenResponse {
   bool isValid = 1;
-  string username =2;
+  string username = 2;
+}
+
+message ReIssueTokenRequest {
+  string refreshToken = 1;
 }
