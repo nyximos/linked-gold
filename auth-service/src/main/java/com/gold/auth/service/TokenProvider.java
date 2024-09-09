@@ -22,21 +22,17 @@ public class TokenProvider {
     @Value("${jwt.prefix}")
     private String tokenPrefix;
 
-    @Value("${jwt.access.expire}")
-    private long jwtExpireDuration;
-
     private SecretKey getSecretKey() {
         return TokenUtils.getSecretKey(key);
     }
 
-    public String issueToken(Map<String, Object> tokenInfo) {
-        long current = System.currentTimeMillis();
+    public String issueToken(Map<String, Object> tokenInfo, long current, long duration) {
         return tokenPrefix + StringUtils.SPACE +
                 Jwts.builder()
                         .subject((String) tokenInfo.get("username"))
                         .claims(tokenInfo)
                         .issuedAt(new Date(current))
-                        .expiration(new Date(current + jwtExpireDuration))
+                        .expiration(new Date(current + duration))
                         .signWith(getSecretKey())
                         .compact();
     }
