@@ -58,6 +58,7 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
             tokenProvider.validateToken(accessToken);
 
             Auth.ValidateTokenResponse response = Auth.ValidateTokenResponse.newBuilder()
+                    .setId(tokenProvider.extractId(accessToken))
                     .setUsername(tokenProvider.extractUsername(accessToken))
                     .build();
 
