@@ -5,5 +5,5 @@ import com.gold.core.config.DefaultRedisRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RefreshTokenRepository extends DefaultRedisRepository<RefreshTokenEntity, String> {
+public interface RefreshTokenRepository extends DefaultRedisRepository<RefreshTokenEntity, Long> {
 }

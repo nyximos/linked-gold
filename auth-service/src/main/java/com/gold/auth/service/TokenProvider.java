@@ -1,6 +1,7 @@
 package com.gold.auth.service;
 
 
+import com.gold.core.exception.InvalidTokenException;
 import com.gold.core.util.TokenUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -29,7 +30,7 @@ public class TokenProvider {
     public String issueToken(Map<String, Object> tokenInfo, long current, long duration) {
         return tokenPrefix + StringUtils.SPACE +
                 Jwts.builder()
-                        .subject((String) tokenInfo.get("username"))
+                        .subject(String.valueOf(tokenInfo.get("id")))
                         .claims(tokenInfo)
                         .issuedAt(new Date(current))
                         .expiration(new Date(current + duration))
@@ -41,9 +42,12 @@ public class TokenProvider {
         return TokenUtils.extractAllClaims(TokenUtils.getSecretKey(key),token);
     }
 
+    public Long extractId(String token) {
+        return Long.valueOf(extractClaim(token, Claims::getSubject));
+    }
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return extractClaim(token, claims -> (String) claims.get("username"));
     }
 
     private Date extractExpiration(String token) {
@@ -71,7 +75,7 @@ public class TokenProvider {
             Claims claims = parseJwt(token);
             return !isTokenExpired(token);
         } catch (Exception e) {
-            return false;
+            throw new InvalidTokenException();
         }
     }
 }
