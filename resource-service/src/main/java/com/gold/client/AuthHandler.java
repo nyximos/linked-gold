@@ -15,9 +15,9 @@ public class AuthHandler {
 
     private final AuthClient authClient;
 
-    public Auth.TokenResponse createToken(String username) {
+    public Auth.TokenResponse createToken(Long id, String username) {
         try {
-            return authClient.createToken(username);
+            return authClient.createToken(id, username);
         }catch (Exception e) {
             throw new GoldException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.BAD_REQUEST);
         }

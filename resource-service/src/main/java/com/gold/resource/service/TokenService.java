@@ -13,8 +13,8 @@ public class TokenService {
     private final AuthHandler authHandler;
     private final TokenConverter tokenConverter;
 
-    public TokenModel issue(String email) {
-        return tokenConverter.convert(authHandler.createToken(email));
+    public TokenModel issue(Long id, String email) {
+        return tokenConverter.convert(authHandler.createToken(id, email));
     }
 
     public TokenModel reIssue(String refreshToken) {
