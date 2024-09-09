@@ -1,5 +1,6 @@
 package com.gold.resource.service;
 
+import com.gold.core.exception.UserNotFoundException;
 import com.gold.resource.controller.model.request.LoginRequestModel;
 import com.gold.resource.controller.model.request.SignUpRequestModel;
 import com.gold.resource.controller.model.response.TokenModel;
@@ -34,6 +35,7 @@ public class UserService {
 
     public TokenModel signIn(LoginRequestModel loginRequestModel) {
         loginValidateDelegator.validate(loginRequestModel);
-        return tokenService.issue(loginRequestModel.getEmail());
+        UserEntity user = userRepository.findByUsername(loginRequestModel.getEmail()).orElseThrow(UserNotFoundException::new);
+        return tokenService.issue(user.getId(), loginRequestModel.getEmail());
     }
 }
