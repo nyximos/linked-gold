@@ -2,7 +2,9 @@ package com.gold.auth.service;
 
 import com.gold.auth.converter.RefreshTokenConverter;
 import com.gold.auth.persistence.repository.RefreshTokenRepository;
-import com.gold.auth.persistence.repository.entity.RefreshTokenEntity;
+import com.gold.auth.service.validator.RefreshTokenValidator;
+import com.gold.auth.service.validator.TokenValidator;
+import com.gold.core.exception.GoldException;
 import com.nyximos.auth.Auth;
 import com.nyximos.auth.AuthServiceGrpc;
 import io.grpc.stub.StreamObserver;
@@ -28,26 +30,21 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final RefreshTokenConverter refreshTokenConverter;
+    private final TokenValidator tokenValidator;
+    private final RefreshTokenValidator refreshTokenValidator;
 
     @Override
     @Transactional
     public void createToken(Auth.TokenRequest request, StreamObserver<Auth.TokenResponse> responseObserver) {
         String username = request.getUsername();
-
-        Map<String, Object> tokenInfo = new HashMap<>();
-        tokenInfo.put("username", username);
-
         long current = System.currentTimeMillis();
 
+        Map<String, Object> tokenInfo = createTokenInfo(username);
         String accessToken = tokenProvider.issueToken(tokenInfo, current, accessExpireDuration);
         String refreshToken = tokenProvider.issueToken(tokenInfo, current, refreshExpireDuration);
-
         refreshTokenRepository.save(refreshTokenConverter.convert(username, tokenProvider.removePrefix(refreshToken), current+refreshExpireDuration));
 
-        Auth.TokenResponse tokenResponse = Auth.TokenResponse.newBuilder()
-                .setAccessToken(accessToken)
-                .setRefreshToken(refreshToken)
-                .build();
+        Auth.TokenResponse tokenResponse = createTokenResponse(accessToken, refreshToken);
 
         responseObserver.onNext(tokenResponse);
         responseObserver.onCompleted();
@@ -56,7 +53,6 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
     @Override
     public void validateToken(Auth.ValidateTokenRequest request, StreamObserver<Auth.ValidateTokenResponse> responseObserver) {
         String accessToken = tokenProvider.removePrefix(request.getAccessToken());
-
         boolean isValid = tokenProvider.validateToken(accessToken);
 
         Auth.ValidateTokenResponse response = Auth.ValidateTokenResponse.newBuilder()
@@ -71,34 +67,39 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
     @Override
     @Transactional
     public void reIssueToken(Auth.ReIssueTokenRequest request, StreamObserver<Auth.TokenResponse> responseObserver) {
-        String refreshToken = tokenProvider.removePrefix(request.getRefreshToken());
+        try {
+            String refreshToken = tokenProvider.removePrefix(request.getRefreshToken());
+            String username = tokenProvider.extractUsername(refreshToken);
 
-        if (!tokenProvider.validateToken(refreshToken)) {
-            responseObserver.onError(new RuntimeException("Invalid refresh token"));
-            return;
+            tokenValidator.validate(refreshToken);
+            refreshTokenValidator.validate(refreshToken, username);
+
+            Map<String, Object> tokenInfo = createTokenInfo(username);
+            long current = System.currentTimeMillis();
+            String accessToken = tokenProvider.issueToken(tokenInfo, current, accessExpireDuration);
+            String newRefreshToken = tokenProvider.issueToken(tokenInfo, current, refreshExpireDuration);
+            refreshTokenRepository.save(refreshTokenConverter.convert(username, tokenProvider.removePrefix(newRefreshToken), current + refreshExpireDuration));
+            Auth.TokenResponse tokenResponse = createTokenResponse(accessToken, newRefreshToken);
+
+            responseObserver.onNext(tokenResponse);
+            responseObserver.onCompleted();
+        } catch (GoldException e) {
+            responseObserver.onError(new RuntimeException(e.getMessage()));
+
         }
-
-        String username = tokenProvider.extractUsername(refreshToken);
-
-        refreshTokenRepository.findById(username)
-                .filter(entity -> entity.getRefreshToken().equals(refreshToken))
-                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
-
-        HashMap<String, Object> tokenInfo = new HashMap<>();
-        tokenInfo.put("username", username);
-
-        long current = System.currentTimeMillis();
-        String accessToken = tokenProvider.issueToken(tokenInfo, current, accessExpireDuration);
-        String newRefreshToken = tokenProvider.issueToken(tokenInfo, current, refreshExpireDuration);
-
-        refreshTokenRepository.save(refreshTokenConverter.convert(username, tokenProvider.removePrefix(newRefreshToken), current+refreshExpireDuration));
-
-        Auth.TokenResponse tokenResponse = Auth.TokenResponse.newBuilder()
-                .setAccessToken(accessToken)
-                .setRefreshToken(newRefreshToken)
-                .build();
-
-        responseObserver.onNext(tokenResponse);
-        responseObserver.onCompleted();
     }
+
+    private Map<String, Object> createTokenInfo(String username) {
+        Map<String, Object> tokenInfo = new HashMap<>();
+        tokenInfo.put("username", username);
+        return tokenInfo;
+    }
+
+    private Auth.TokenResponse createTokenResponse(String accessToken, String refreshToken) {
+        return Auth.TokenResponse.newBuilder()
+                .setAccessToken(accessToken)
+                .setRefreshToken(refreshToken)
+                .build();
+    }
+
 }
