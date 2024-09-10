@@ -13,10 +13,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "invoice")
-public class InvoiceEntity {
+public class InvoiceEntity extends BaseEntity {
 
     @Id
-    @Column(name = "id", length = 20, nullable = false)
+    @Column(name = "id", length = 50, nullable = false)
     private String id;
 
     @Enumerated(EnumType.STRING)

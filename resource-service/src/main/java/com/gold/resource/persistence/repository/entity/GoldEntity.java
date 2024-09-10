@@ -25,7 +25,7 @@ public class GoldEntity extends BaseEntity {
     private GoldType goldType;
 
     @Column(name = "unit_price", nullable = false, precision = 19, scale = 2)
-    private BigDecimal unit_price;
+    private BigDecimal unitPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "invoice_type", length = 20, nullable = false)
