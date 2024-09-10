@@ -18,10 +18,10 @@ public class InvoiceController {
     private final InvoiceService invoiceService;
 
     @PostMapping("/{id}")
-    public ResultResponse<Void> test(@RequestAttribute(value = TOKEN_USER) TokenUser tokenUser,
+    public ResultResponse<Void> createInvoice(@RequestAttribute(value = TOKEN_USER) TokenUser tokenUser,
                                      @PathVariable(value = "id") Long goldId,
                                      @RequestParam(value = "unit") BigDecimal unit) {
-//        invoiceService.
+        invoiceService.createInvoice(tokenUser.getId(), goldId, unit);
         return new ResultResponse<>();
     }
 
