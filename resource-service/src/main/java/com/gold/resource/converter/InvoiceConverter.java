@@ -16,7 +16,7 @@ public interface InvoiceConverter {
     @Mapping(target = "customerId", source = "userId")
     @Mapping(target = "unit_price", source = "gold.unitPrice")
     @Mapping(target = "amount", expression = "java(gold.calculateAmount(unit))")
-    @Mapping(target = "orderStatus", expression = "java(gold.determineOrderStatus())")
+    @Mapping(target = "orderStatus", constant = "ORDER_COMPLETE")
     InvoiceEntity convert(Long userId, Gold gold, BigDecimal unit);
 
 }

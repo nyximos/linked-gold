@@ -7,12 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum OrderStatus {
 
-    ORDER_COMPLETE("구매 주문 완료"),
-    ORDER_PAYMENT_COMPLETE("구매 입금 완료"),
-    ORDER_SHIPMENT_COMPLETE("구매 발송 완료"),
-    SALE_ORDER_COMPLETE("판매 주문 완료"),
-    SALE_REMITTANCE_COMPLETE("판매 송금 완료"),
-    REMITTANCE_RECEIPT_COMPLETE("판매 수령 완료")
+    ORDER_COMPLETE("주문 완료"),
+    PAYMENT_COMPLETE("입금/송금 완료"),
+    SHIPMENT_COMPLETE("발송 완료"),
+    RECEIPT_COMPLETE("수령 완료"),
+    ORDER_CANCEL("주문 취소"),
+    REFUNDED("환불 완료")
     ;
 
     private final String description;
