@@ -11,7 +11,6 @@ public enum OrderStatus {
     PAYMENT_COMPLETE("결제 완료"),
     SHIPMENT_COMPLETE("발송 완료"),
     ORDER_CANCEL("주문 취소"),
-    REFUNDED("환불 완료")
     ;
 
     private final String description;

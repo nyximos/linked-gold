@@ -64,14 +64,8 @@ public class InvoiceService {
         InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
         cancelValidator.validate(invoice.getOrderStatus());
         invoice.updateOrderStatus(OrderStatus.ORDER_CANCEL);
+        goldService.addWeight(invoice.getGoldId(), invoice.getWeight());
         invoiceRepository.save(invoice);
     }
 
-    @Transactional
-    public void refund(String invoiceId) {
-        InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
-        cancelValidator.validate(invoice.getOrderStatus());
-        invoice.updateOrderStatus(OrderStatus.REFUNDED);
-        invoiceRepository.save(invoice);
-    }
 }

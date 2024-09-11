@@ -37,4 +37,8 @@ public class GoldEntity extends BaseEntity {
     public void subtractWeight(BigDecimal weight) {
         this.weight = this.weight.subtract(weight);
     }
+
+    public void addWeight(BigDecimal weight) {
+        this.weight = this.weight.add(weight);
+    }
 }

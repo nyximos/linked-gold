@@ -20,7 +20,6 @@ public enum ErrorCode {
     PAYMENT_FAILED("결제에 실패했습니다."),
     UNPAID_ORDER("미결제 주문입니다."),
     ORDER_CANCELED("취소된 주문입니다."),
-    ORDER_REFUNDED("환불 완료된 주문입니다."),
     ALREADY_SHIPPED_ORDER("이미 배송된 주문입니다.")
     ;
 
