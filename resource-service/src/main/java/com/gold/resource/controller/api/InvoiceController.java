@@ -1,6 +1,5 @@
 package com.gold.resource.controller.api;
 
-import com.gold.core.code.OrderStatus;
 import com.gold.core.wrapper.ResultResponse;
 import com.gold.core.wrapper.TokenUser;
 import com.gold.resource.controller.model.response.InvoiceResponse;
@@ -43,6 +42,12 @@ public class InvoiceController {
     @PutMapping("/shipment")
     public ResultResponse<Void> shipment(@RequestParam(value = "id") String invoiceId) {
         invoiceService.shipment(invoiceId);
+        return new ResultResponse<>();
+    }
+
+    @PutMapping("/cancel")
+    public ResultResponse<Void> cancel(@RequestParam(value = "id") String invoiceId) {
+        invoiceService.cancel(invoiceId);
         return new ResultResponse<>();
     }
 }
