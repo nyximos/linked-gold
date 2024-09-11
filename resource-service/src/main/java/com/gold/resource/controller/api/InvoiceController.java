@@ -50,4 +50,10 @@ public class InvoiceController {
         invoiceService.cancel(invoiceId);
         return new ResultResponse<>();
     }
+
+    @PutMapping("/refund")
+    public ResultResponse<Void> refund(@RequestParam(value = "id") String invoiceId) {
+        invoiceService.refund(invoiceId);
+        return new ResultResponse<>();
+    }
 }
