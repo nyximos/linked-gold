@@ -9,14 +9,15 @@ import com.nyximos.auth.Auth;
 import com.nyximos.auth.AuthServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @GrpcService
 @RequiredArgsConstructor
 public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
@@ -36,19 +37,24 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
     @Override
     @Transactional
     public void createToken(Auth.TokenRequest request, StreamObserver<Auth.TokenResponse> responseObserver) {
-        long userId = request.getId();
-        String username = request.getUsername();
-        long current = System.currentTimeMillis();
+        try {
+            long userId = request.getId();
+            String username = request.getUsername();
+            long current = System.currentTimeMillis();
 
-        Map<String, Object> tokenInfo = createTokenInfo(userId, username);
-        String accessToken = tokenProvider.issueToken(tokenInfo, current, accessExpireDuration);
-        String refreshToken = tokenProvider.issueToken(tokenInfo, current, refreshExpireDuration);
-        refreshTokenRepository.save(refreshTokenConverter.convert(userId, tokenProvider.removePrefix(refreshToken), current+refreshExpireDuration));
+            Map<String, Object> tokenInfo = createTokenInfo(userId, username);
+            String accessToken = tokenProvider.issueToken(tokenInfo, current, accessExpireDuration);
+            String refreshToken = tokenProvider.issueToken(tokenInfo, current, refreshExpireDuration);
+            refreshTokenRepository.save(refreshTokenConverter.convert(userId, tokenProvider.removePrefix(refreshToken), current+refreshExpireDuration));
 
-        Auth.TokenResponse tokenResponse = createTokenResponse(accessToken, refreshToken);
+            Auth.TokenResponse tokenResponse = createTokenResponse(accessToken, refreshToken);
 
-        responseObserver.onNext(tokenResponse);
-        responseObserver.onCompleted();
+            responseObserver.onNext(tokenResponse);
+            responseObserver.onCompleted();
+        } catch (GoldException e) {
+            log.error("Error creating token: {}", e.getMessage());
+            responseObserver.onError(new RuntimeException(e.getMessage()));
+        }
     }
 
     @Override
@@ -65,6 +71,7 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (GoldException e) {
+            log.error("Error validating token: {}", e.getMessage());
             responseObserver.onError(new RuntimeException(e.getMessage()));
         }
     }
@@ -90,6 +97,7 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
             responseObserver.onNext(tokenResponse);
             responseObserver.onCompleted();
         } catch (GoldException e) {
+            log.error("Error reissuing token : {}", e.getMessage());
             responseObserver.onError(new RuntimeException(e.getMessage()));
         }
     }

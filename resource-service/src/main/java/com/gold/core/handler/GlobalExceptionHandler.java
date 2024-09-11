@@ -14,6 +14,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(GoldException.class)
     public ResultResponse<Void> handleWantedException(GoldException ex) {
+        log.warn("Gold Exception: {}", ex.getMessage());
         return new ResultResponse<>(false, ex.getHttpStatus(), ex.getMessage());
     }
 
@@ -21,6 +22,7 @@ public class GlobalExceptionHandler {
     public ResultResponse<Void> handleValidationExceptions(MethodArgumentNotValidException ex) {
         StringBuilder sb = new StringBuilder();
         ex.getBindingResult().getAllErrors().forEach(x -> sb.append(x).append("\n"));
+        log.warn("Validation Exception: {}", sb.toString().trim());
         return new ResultResponse<>(false, HttpStatus.BAD_REQUEST, sb.toString().trim());
     }
 }
