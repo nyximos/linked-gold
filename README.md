@@ -30,6 +30,7 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
 - springboot 3.3.3
 - gradle
 - MariaDB
+- Redis
 - GRPC
 - Resource Service
     - http://localhost:8888
@@ -117,7 +118,13 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
     DB_USERNAME=
     DB_PASSWORD=
     ```
-    
+
+**Setting Up Redis with Docker**
+```
+docker run --name redis -p 6379:6379 -d redis:latest
+docker exec -it redis redis-cli
+```
+
 
 **Clone the Repository**
 
