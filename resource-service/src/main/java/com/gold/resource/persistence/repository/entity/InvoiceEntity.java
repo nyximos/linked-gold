@@ -27,7 +27,7 @@ public class InvoiceEntity extends BaseEntity {
     private BigDecimal amount;
 
     @Column(name = "unit_price", nullable = false, precision = 19, scale = 2)
-    private BigDecimal unit_price;
+    private BigDecimal unitPrice;
 
     @Column(name = "weight", nullable = false, precision = 10, scale = 2)
     private BigDecimal weight;
