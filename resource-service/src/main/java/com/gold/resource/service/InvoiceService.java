@@ -44,7 +44,7 @@ public class InvoiceService {
     public InvoiceResponse getInvoice(String invoiceId, Long userId, String customerEmail) {
         InvoiceEntity invoice = invoiceRepository.findByIdAndCustomerId(invoiceId, userId).orElseThrow(InvoiceNotFoundException::new);
         Gold gold = goldService.getGold(invoice.getGoldId());
-        return invoiceConverter.convertToInvoiceResponse(invoice, gold, customerEmail);
+        return invoiceConverter.convert(invoice, gold, customerEmail);
     }
 
     @Transactional

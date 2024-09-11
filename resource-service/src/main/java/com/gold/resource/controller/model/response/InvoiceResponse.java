@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,4 +21,6 @@ public class InvoiceResponse {
     private String customerEmail;
     private Long goldId;
     private String goldType;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

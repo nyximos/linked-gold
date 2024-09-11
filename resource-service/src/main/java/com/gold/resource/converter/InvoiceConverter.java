@@ -31,7 +31,9 @@ public interface InvoiceConverter {
     @Mapping(target = "orderStatus", source = "invoice.orderStatus")
     @Mapping(target = "goldId", source = "invoice.goldId")
     @Mapping(target = "goldType", expression = "java(gold.getGoldType().getDescription())")
-    InvoiceResponse convertToInvoiceResponse(InvoiceEntity invoice, Gold gold, String customerEmail);
+    @Mapping(target = "createdAt", source = "invoice.createdAt")
+    @Mapping(target = "updatedAt", source = "invoice.updatedAt")
+    InvoiceResponse convert(InvoiceEntity invoice, Gold gold, String customerEmail);
 
     @Mapping(target = "goldType", expression = "java(source.getInvoiceType().name())")
     InvoiceListResponse convert(InvoiceEntity source);
