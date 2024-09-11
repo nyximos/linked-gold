@@ -40,5 +40,9 @@ public class InvoiceController {
         return new ResultResponse<>();
     }
 
-
+    @PutMapping("/shipment")
+    public ResultResponse<Void> shipment(@RequestParam(value = "id") String invoiceId) {
+        invoiceService.shipment(invoiceId);
+        return new ResultResponse<>();
+    }
 }

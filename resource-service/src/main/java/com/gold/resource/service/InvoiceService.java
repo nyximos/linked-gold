@@ -8,6 +8,7 @@ import com.gold.resource.persistence.repository.InvoiceRepository;
 import com.gold.resource.persistence.repository.entity.InvoiceEntity;
 import com.gold.resource.service.delegator.validate.GoldWeightValidator;
 import com.gold.resource.service.delegator.validate.PaymentValidator;
+import com.gold.resource.service.delegator.validate.ShipmentValidator;
 import com.gold.resource.service.delegator.validate.UserValidator;
 import com.gold.resource.service.domain.Gold;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class InvoiceService {
     private final InvoiceConverter invoiceConverter;
     private final GoldWeightValidator goldWeightValidator;
     private final PaymentValidator paymentValidator;
+    private final ShipmentValidator shipmentValidator;
 
     @Transactional
     public void createInvoice(Long userId, Long goldId, BigDecimal weight) {
@@ -46,8 +48,16 @@ public class InvoiceService {
     @Transactional
     public void payment(String invoiceId) {
         InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
-        paymentValidator.validate(invoice);
+        paymentValidator.validate(invoice.getOrderStatus());
         invoice.updateOrderStatus(OrderStatus.PAYMENT_COMPLETE);
+        invoiceRepository.save(invoice);
+    }
+
+    @Transactional
+    public void shipment(String invoiceId) {
+        InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
+        shipmentValidator.validate(invoice.getOrderStatus());
+        invoice.updateOrderStatus(OrderStatus.SHIPMENT_COMPLETE);
         invoiceRepository.save(invoice);
     }
 }
