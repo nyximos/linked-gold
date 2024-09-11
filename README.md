@@ -33,10 +33,10 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
 - Redis
 - GRPC
 - Resource Service
-    - http://localhost:8888
-    - http://localhost:8888/swagger-ui/index.html
-- Auth Service
     - http://localhost:9999
+    - http://localhost:9999/swagger-ui/index.html
+- Auth Service
+    - http://localhost:8888
 
 
 
