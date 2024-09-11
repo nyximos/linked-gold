@@ -23,7 +23,7 @@ public class Gold {
         return unit.multiply(this.unitPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
-    public OrderStatus mapOrderStatus() {
+    public OrderStatus determineOrderStatus() {
         if (this.invoiceType == InvoiceType.PURCHASE) {
             return OrderStatus.ORDER_COMPLETE;
         } else if (this.invoiceType == InvoiceType.SALE) {
