@@ -19,7 +19,7 @@ public class SwaggerConfig {
     private Info apiInfo() {
         return new Info()
                 .title("api document")
-                .description("linked gold resource api")
+                .description("linked gold auth api")
                 .version("0.0.1");
     }
 
