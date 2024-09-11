@@ -33,7 +33,22 @@ public class InvoiceController {
         return new ResultResponse<>(invoiceResponse);
     }
 
+    @PutMapping("/payment")
+    public ResultResponse<Void> payment(@RequestParam(value = "id") String invoiceId) {
+        invoiceService.payment(invoiceId);
+        return new ResultResponse<>();
+    }
 
+    @PutMapping("/shipment")
+    public ResultResponse<Void> shipment(@RequestParam(value = "id") String invoiceId) {
+        invoiceService.shipment(invoiceId);
+        return new ResultResponse<>();
+    }
 
+    @PutMapping("/cancel")
+    public ResultResponse<Void> cancel(@RequestParam(value = "id") String invoiceId) {
+        invoiceService.cancel(invoiceId);
+        return new ResultResponse<>();
+    }
 
 }

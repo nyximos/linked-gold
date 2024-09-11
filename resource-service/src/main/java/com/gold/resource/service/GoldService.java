@@ -26,4 +26,10 @@ public class GoldService {
         goldEntity.subtractWeight(weight);
         return goldConverter.convert(goldEntity);
     }
+
+    public void addWeight(Long goldId, BigDecimal weight) {
+        GoldEntity goldEntity = goldRepository.findById(goldId).orElseThrow(GoldNotFoundException::new);
+        goldEntity.addWeight(weight);
+        goldRepository.save(goldEntity);
+    }
 }

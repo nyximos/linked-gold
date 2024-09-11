@@ -1,12 +1,12 @@
 package com.gold.resource.service;
 
+import com.gold.core.code.OrderStatus;
 import com.gold.core.exception.InvoiceNotFoundException;
 import com.gold.resource.controller.model.response.InvoiceResponse;
 import com.gold.resource.converter.InvoiceConverter;
 import com.gold.resource.persistence.repository.InvoiceRepository;
 import com.gold.resource.persistence.repository.entity.InvoiceEntity;
-import com.gold.resource.service.delegator.validate.GoldWeightValidator;
-import com.gold.resource.service.delegator.validate.UserValidator;
+import com.gold.resource.service.delegator.validate.*;
 import com.gold.resource.service.domain.Gold;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,10 @@ public class InvoiceService {
     private final GoldService goldService;
     private final InvoiceRepository invoiceRepository;
     private final InvoiceConverter invoiceConverter;
-    private final GoldWeightValidator goldWeightValidator;;
+    private final GoldWeightValidator goldWeightValidator;
+    private final PaymentValidator paymentValidator;
+    private final ShipmentValidator shipmentValidator;
+    private final CancelValidator cancelValidator;
 
     @Transactional
     public void createInvoice(Long userId, Long goldId, BigDecimal weight) {
@@ -39,4 +42,30 @@ public class InvoiceService {
         Gold gold = goldService.getGold(invoice.getGoldId());
         return invoiceConverter.convertToInvoiceResponse(invoice, gold, customerEmail);
     }
+
+    @Transactional
+    public void payment(String invoiceId) {
+        InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
+        paymentValidator.validate(invoice.getOrderStatus());
+        invoice.updateOrderStatus(OrderStatus.PAYMENT_COMPLETE);
+        invoiceRepository.save(invoice);
+    }
+
+    @Transactional
+    public void shipment(String invoiceId) {
+        InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
+        shipmentValidator.validate(invoice.getOrderStatus());
+        invoice.updateOrderStatus(OrderStatus.SHIPMENT_COMPLETE);
+        invoiceRepository.save(invoice);
+    }
+
+    @Transactional
+    public void cancel(String invoiceId) {
+        InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
+        cancelValidator.validate(invoice.getOrderStatus());
+        invoice.updateOrderStatus(OrderStatus.ORDER_CANCEL);
+        goldService.addWeight(invoice.getGoldId(), invoice.getWeight());
+        invoiceRepository.save(invoice);
+    }
+
 }

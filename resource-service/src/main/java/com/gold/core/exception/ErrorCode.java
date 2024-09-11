@@ -17,6 +17,10 @@ public enum ErrorCode {
     UNKNOWN_INVOICE_TYPE("주문 타입을 알 수 없습니다."),
     INSUFFICIENT_WEIGHT_EXCEPTION("재고가 부족합니다."),
     INVOICE_NOT_FOUND_EXCEPTION("주문내역을 찾을 수 없습니다."),
+    PAYMENT_FAILED("결제에 실패했습니다."),
+    UNPAID_ORDER("미결제 주문입니다."),
+    ORDER_CANCELED("취소된 주문입니다."),
+    ALREADY_SHIPPED_ORDER("이미 배송된 주문입니다.")
     ;
 
     private String defaultMessage;
