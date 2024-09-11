@@ -2,6 +2,7 @@ package com.gold.resource.controller.api;
 
 import com.gold.core.wrapper.ResultResponse;
 import com.gold.core.wrapper.TokenUser;
+import com.gold.resource.controller.model.response.InvoiceResponse;
 import com.gold.resource.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,14 @@ public class InvoiceController {
         invoiceService.createInvoice(tokenUser.getId(), goldId, weight);
         return new ResultResponse<>();
     }
+
+    @GetMapping
+    public ResultResponse<InvoiceResponse> getInvoice(@RequestAttribute(value = TOKEN_USER) TokenUser tokenUser,
+                                                      @RequestParam(value = "id") String invoiceId) {
+        InvoiceResponse invoiceResponse = invoiceService.getInvoice(invoiceId, tokenUser.getId(), tokenUser.getEmail());
+        return new ResultResponse<>(invoiceResponse);
+    }
+
 
 
 
