@@ -20,8 +20,8 @@ public class InvoiceController {
     @PostMapping("/{id}")
     public ResultResponse<Void> createInvoice(@RequestAttribute(value = TOKEN_USER) TokenUser tokenUser,
                                      @PathVariable(value = "id") Long goldId,
-                                     @RequestParam(value = "unit") BigDecimal unit) {
-        invoiceService.createInvoice(tokenUser.getId(), goldId, unit);
+                                     @RequestParam(value = "weight") BigDecimal weight) {
+        invoiceService.createInvoice(tokenUser.getId(), goldId, weight);
         return new ResultResponse<>();
     }
 

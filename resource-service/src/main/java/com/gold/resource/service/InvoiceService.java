@@ -20,9 +20,9 @@ public class InvoiceService {
     private final InvoiceConverter invoiceConverter;
 
     @Transactional
-    public void createInvoice(Long userId, Long goldId, BigDecimal unit) {
+    public void createInvoice(Long userId, Long goldId, BigDecimal weight) {
         userValidator.validate(userId);
         Gold gold = goldService.getGold(goldId);
-        invoiceRepository.save(invoiceConverter.convert(userId, gold, unit));
+        invoiceRepository.save(invoiceConverter.convert(userId, gold, weight));
     }
 }

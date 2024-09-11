@@ -29,6 +29,9 @@ public class InvoiceEntity extends BaseEntity {
     @Column(name = "unit_price", nullable = false, precision = 19, scale = 2)
     private BigDecimal unit_price;
 
+    @Column(name = "weight", nullable = false, precision = 10, scale = 2)
+    private BigDecimal weight;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", length = 30, nullable = false)
     private OrderStatus orderStatus;

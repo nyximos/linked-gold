@@ -31,4 +31,7 @@ public class GoldEntity extends BaseEntity {
     @Column(name = "invoice_type", length = 20, nullable = false)
     private InvoiceType invoiceType;
 
+    @Column(name = "quantity", nullable = false, precision = 10, scale = 2)
+    private BigDecimal quantity;
+
 }

@@ -18,8 +18,8 @@ public class Gold {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public BigDecimal calculateAmount(BigDecimal unit) {
-        return unit.multiply(this.unitPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
+    public BigDecimal calculateAmount(BigDecimal weight) {
+        return weight.multiply(this.unitPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
 }
