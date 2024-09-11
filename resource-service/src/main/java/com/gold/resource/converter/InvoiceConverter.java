@@ -1,5 +1,6 @@
 package com.gold.resource.converter;
 
+import com.gold.resource.controller.model.response.InvoiceListResponse;
 import com.gold.resource.controller.model.response.InvoiceResponse;
 import com.gold.resource.persistence.repository.entity.InvoiceEntity;
 import com.gold.resource.service.domain.Gold;
@@ -7,6 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface InvoiceConverter {
@@ -30,4 +32,9 @@ public interface InvoiceConverter {
     @Mapping(target = "goldId", source = "invoice.goldId")
     @Mapping(target = "goldType", expression = "java(gold.getGoldType().getDescription())")
     InvoiceResponse convertToInvoiceResponse(InvoiceEntity invoice, Gold gold, String customerEmail);
+
+    @Mapping(target = "goldType", expression = "java(source.getInvoiceType().name())")
+    InvoiceListResponse convert(InvoiceEntity source);
+
+    List<InvoiceListResponse> convert(List<InvoiceEntity> source);
 }
