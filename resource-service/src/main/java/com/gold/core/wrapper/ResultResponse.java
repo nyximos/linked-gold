@@ -18,7 +18,7 @@ public class ResultResponse<T> implements Serializable {
     private T data;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private PageResponse links;
+    private LinksResponse links;
 
     public ResultResponse() {
         this.success = true;
@@ -29,14 +29,16 @@ public class ResultResponse<T> implements Serializable {
     public ResultResponse(T data) {
         this.success = true;
         this.status = HttpStatus.OK;
-        this.message = "success";
+        this.message = "Success";
         this.data = data;
     }
 
-    public ResultResponse(String message) {
+    public ResultResponse(T data, LinksResponse links) {
         this.success = true;
         this.status = HttpStatus.OK;
-        this.message = message;
+        this.message = "Success to search invoices";
+        this.data = data;
+        this.links = links;
     }
 
     public ResultResponse(boolean status, HttpStatus httpStatus, String message) {

@@ -10,17 +10,14 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class InvoiceResponse {
-
+public class InvoiceListResponse {
     private String id;
     private InvoiceType invoiceType;
     private BigDecimal amount;
     private BigDecimal unitPrice;
     private BigDecimal weight;
     private OrderStatus orderStatus;
-    private String customerEmail;
     private Long goldId;
     private String goldType;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

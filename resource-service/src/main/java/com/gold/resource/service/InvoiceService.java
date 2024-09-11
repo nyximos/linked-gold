@@ -1,7 +1,10 @@
 package com.gold.resource.service;
 
+import com.gold.core.code.InvoiceSearchType;
 import com.gold.core.code.OrderStatus;
 import com.gold.core.exception.InvoiceNotFoundException;
+import com.gold.core.wrapper.PageResponse;
+import com.gold.resource.controller.model.response.InvoiceListResponse;
 import com.gold.resource.controller.model.response.InvoiceResponse;
 import com.gold.resource.converter.InvoiceConverter;
 import com.gold.resource.persistence.repository.InvoiceRepository;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +44,7 @@ public class InvoiceService {
     public InvoiceResponse getInvoice(String invoiceId, Long userId, String customerEmail) {
         InvoiceEntity invoice = invoiceRepository.findByIdAndCustomerId(invoiceId, userId).orElseThrow(InvoiceNotFoundException::new);
         Gold gold = goldService.getGold(invoice.getGoldId());
-        return invoiceConverter.convertToInvoiceResponse(invoice, gold, customerEmail);
+        return invoiceConverter.convert(invoice, gold, customerEmail);
     }
 
     @Transactional
@@ -68,4 +72,9 @@ public class InvoiceService {
         invoiceRepository.save(invoice);
     }
 
+    @Transactional(readOnly = true)
+    public PageResponse<InvoiceListResponse> getInvoices(Long userId, LocalDate date, InvoiceSearchType invoiceSearchType, int offset, int limit) {
+        PageResponse<InvoiceEntity> invoices = invoiceRepository.findInvoices(userId, date, invoiceSearchType, offset, limit);
+        return new PageResponse(invoices.getTotal(), invoiceConverter.convert(invoices.getContents()));
+    }
 }
