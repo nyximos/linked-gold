@@ -6,10 +6,7 @@ import com.gold.resource.controller.model.response.InvoiceResponse;
 import com.gold.resource.converter.InvoiceConverter;
 import com.gold.resource.persistence.repository.InvoiceRepository;
 import com.gold.resource.persistence.repository.entity.InvoiceEntity;
-import com.gold.resource.service.delegator.validate.GoldWeightValidator;
-import com.gold.resource.service.delegator.validate.PaymentValidator;
-import com.gold.resource.service.delegator.validate.ShipmentValidator;
-import com.gold.resource.service.delegator.validate.UserValidator;
+import com.gold.resource.service.delegator.validate.*;
 import com.gold.resource.service.domain.Gold;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +25,7 @@ public class InvoiceService {
     private final GoldWeightValidator goldWeightValidator;
     private final PaymentValidator paymentValidator;
     private final ShipmentValidator shipmentValidator;
+    private final CancelValidator cancelValidator;
 
     @Transactional
     public void createInvoice(Long userId, Long goldId, BigDecimal weight) {
@@ -58,6 +56,14 @@ public class InvoiceService {
         InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
         shipmentValidator.validate(invoice.getOrderStatus());
         invoice.updateOrderStatus(OrderStatus.SHIPMENT_COMPLETE);
+        invoiceRepository.save(invoice);
+    }
+
+    @Transactional
+    public void cancel(String invoiceId) {
+        InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
+        cancelValidator.validate(invoice.getOrderStatus());
+        invoice.updateOrderStatus(OrderStatus.ORDER_CANCEL);
         invoiceRepository.save(invoice);
     }
 }
