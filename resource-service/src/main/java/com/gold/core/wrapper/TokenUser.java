@@ -8,5 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class TokenUser {
+    private Long id;
     private String email;
 }

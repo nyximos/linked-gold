@@ -18,8 +18,9 @@ public class AuthClient {
         authServiceStub = AuthServiceGrpc.newBlockingStub(channel);
     }
 
-    public Auth.TokenResponse createToken(String username) {
+    public Auth.TokenResponse createToken(Long id, String username) {
         Auth.TokenRequest request = Auth.TokenRequest.newBuilder()
+                .setId(id)
                 .setUsername(username)
                 .build();
         Auth.TokenResponse response = authServiceStub.createToken(request);

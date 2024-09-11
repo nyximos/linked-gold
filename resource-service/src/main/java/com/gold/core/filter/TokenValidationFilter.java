@@ -34,13 +34,8 @@ public class TokenValidationFilter implements Filter {
             if (token != null && token.startsWith(TOKEN_PREFIX + StringUtils.SPACE)) {
                 try {
                     Auth.ValidateTokenResponse validateResponse = authClient.validateToken(token);
-                    if (validateResponse.getIsValid()) {
-                        TokenUser tokenUser = new TokenUser(validateResponse.getUsername());
-                        httpServletRequest.setAttribute("TokenUser", tokenUser);
-                    } else {
-                        httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 토큰입니다.");
-                        return;
-                    }
+                    TokenUser tokenUser = new TokenUser(validateResponse.getId(), validateResponse.getUsername());
+                    httpServletRequest.setAttribute("TokenUser", tokenUser);
                 } catch (Exception e) {
                     httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰 검증에 실패했습니다.");
                     return;

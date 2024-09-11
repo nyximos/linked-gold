@@ -11,8 +11,8 @@ public class RefreshTokenValidator {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public void validate(String refreshToken, String username) {
-        refreshTokenRepository.findById(username)
+    public void validate(String refreshToken, Long userId) {
+        refreshTokenRepository.findById(userId)
                 .filter(entity -> entity.getRefreshToken().equals(refreshToken))
                 .orElseThrow(InvalidRefreshTokenException::new);
     }

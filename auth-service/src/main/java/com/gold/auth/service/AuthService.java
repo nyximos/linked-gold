@@ -36,13 +36,14 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
     @Override
     @Transactional
     public void createToken(Auth.TokenRequest request, StreamObserver<Auth.TokenResponse> responseObserver) {
+        long userId = request.getId();
         String username = request.getUsername();
         long current = System.currentTimeMillis();
 
-        Map<String, Object> tokenInfo = createTokenInfo(username);
+        Map<String, Object> tokenInfo = createTokenInfo(userId, username);
         String accessToken = tokenProvider.issueToken(tokenInfo, current, accessExpireDuration);
         String refreshToken = tokenProvider.issueToken(tokenInfo, current, refreshExpireDuration);
-        refreshTokenRepository.save(refreshTokenConverter.convert(username, tokenProvider.removePrefix(refreshToken), current+refreshExpireDuration));
+        refreshTokenRepository.save(refreshTokenConverter.convert(userId, tokenProvider.removePrefix(refreshToken), current+refreshExpireDuration));
 
         Auth.TokenResponse tokenResponse = createTokenResponse(accessToken, refreshToken);
 
@@ -52,16 +53,20 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
 
     @Override
     public void validateToken(Auth.ValidateTokenRequest request, StreamObserver<Auth.ValidateTokenResponse> responseObserver) {
-        String accessToken = tokenProvider.removePrefix(request.getAccessToken());
-        boolean isValid = tokenProvider.validateToken(accessToken);
+        try {
+            String accessToken = tokenProvider.removePrefix(request.getAccessToken());
+            tokenProvider.validateToken(accessToken);
 
-        Auth.ValidateTokenResponse response = Auth.ValidateTokenResponse.newBuilder()
-                .setIsValid(isValid)
-                .setUsername(isValid ? tokenProvider.extractUsername(accessToken) : StringUtils.EMPTY)
-                .build();
+            Auth.ValidateTokenResponse response = Auth.ValidateTokenResponse.newBuilder()
+                    .setId(tokenProvider.extractId(accessToken))
+                    .setUsername(tokenProvider.extractUsername(accessToken))
+                    .build();
 
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (GoldException e) {
+            responseObserver.onError(new RuntimeException(e.getMessage()));
+        }
     }
 
     @Override
@@ -70,27 +75,28 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
         try {
             String refreshToken = tokenProvider.removePrefix(request.getRefreshToken());
             String username = tokenProvider.extractUsername(refreshToken);
+            Long userId = tokenProvider.extractId(refreshToken);
 
             tokenValidator.validate(refreshToken);
-            refreshTokenValidator.validate(refreshToken, username);
+            refreshTokenValidator.validate(refreshToken, userId);
 
-            Map<String, Object> tokenInfo = createTokenInfo(username);
+            Map<String, Object> tokenInfo = createTokenInfo(userId, username);
             long current = System.currentTimeMillis();
             String accessToken = tokenProvider.issueToken(tokenInfo, current, accessExpireDuration);
             String newRefreshToken = tokenProvider.issueToken(tokenInfo, current, refreshExpireDuration);
-            refreshTokenRepository.save(refreshTokenConverter.convert(username, tokenProvider.removePrefix(newRefreshToken), current + refreshExpireDuration));
+            refreshTokenRepository.save(refreshTokenConverter.convert(userId, tokenProvider.removePrefix(newRefreshToken), current + refreshExpireDuration));
             Auth.TokenResponse tokenResponse = createTokenResponse(accessToken, newRefreshToken);
 
             responseObserver.onNext(tokenResponse);
             responseObserver.onCompleted();
         } catch (GoldException e) {
             responseObserver.onError(new RuntimeException(e.getMessage()));
-
         }
     }
 
-    private Map<String, Object> createTokenInfo(String username) {
+    private Map<String, Object> createTokenInfo(Long id, String username) {
         Map<String, Object> tokenInfo = new HashMap<>();
+        tokenInfo.put("id", id);
         tokenInfo.put("username", username);
         return tokenInfo;
     }

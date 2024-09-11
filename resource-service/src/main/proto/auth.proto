@@ -10,7 +10,8 @@ service AuthService {
 }
 
 message TokenRequest {
-  string username = 1;
+  int64 id = 1;
+  string username = 2;
 }
 
 message TokenResponse {
@@ -23,7 +24,7 @@ message ValidateTokenRequest {
 }
 
 message ValidateTokenResponse {
-  bool isValid = 1;
+  int64 id = 1;
   string username = 2;
 }
 
