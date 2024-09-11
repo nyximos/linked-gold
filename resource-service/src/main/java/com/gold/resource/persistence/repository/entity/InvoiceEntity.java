@@ -41,4 +41,8 @@ public class InvoiceEntity extends BaseEntity {
 
     @Column(name = "gold_id", nullable = false)
     private Long goldId;
+
+    public void updateOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }

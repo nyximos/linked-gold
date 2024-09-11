@@ -1,5 +1,6 @@
 package com.gold.resource.controller.api;
 
+import com.gold.core.code.OrderStatus;
 import com.gold.core.wrapper.ResultResponse;
 import com.gold.core.wrapper.TokenUser;
 import com.gold.resource.controller.model.response.InvoiceResponse;
@@ -33,7 +34,11 @@ public class InvoiceController {
         return new ResultResponse<>(invoiceResponse);
     }
 
-
+    @PutMapping("/payment")
+    public ResultResponse<Void> payment(@RequestParam(value = "id") String invoiceId) {
+        invoiceService.payment(invoiceId);
+        return new ResultResponse<>();
+    }
 
 
 }

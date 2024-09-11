@@ -1,11 +1,13 @@
 package com.gold.resource.service;
 
+import com.gold.core.code.OrderStatus;
 import com.gold.core.exception.InvoiceNotFoundException;
 import com.gold.resource.controller.model.response.InvoiceResponse;
 import com.gold.resource.converter.InvoiceConverter;
 import com.gold.resource.persistence.repository.InvoiceRepository;
 import com.gold.resource.persistence.repository.entity.InvoiceEntity;
 import com.gold.resource.service.delegator.validate.GoldWeightValidator;
+import com.gold.resource.service.delegator.validate.PaymentValidator;
 import com.gold.resource.service.delegator.validate.UserValidator;
 import com.gold.resource.service.domain.Gold;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,8 @@ public class InvoiceService {
     private final GoldService goldService;
     private final InvoiceRepository invoiceRepository;
     private final InvoiceConverter invoiceConverter;
-    private final GoldWeightValidator goldWeightValidator;;
+    private final GoldWeightValidator goldWeightValidator;
+    private final PaymentValidator paymentValidator;
 
     @Transactional
     public void createInvoice(Long userId, Long goldId, BigDecimal weight) {
@@ -38,5 +41,13 @@ public class InvoiceService {
         InvoiceEntity invoice = invoiceRepository.findByIdAndCustomerId(invoiceId, userId).orElseThrow(InvoiceNotFoundException::new);
         Gold gold = goldService.getGold(invoice.getGoldId());
         return invoiceConverter.convertToInvoiceResponse(invoice, gold, customerEmail);
+    }
+
+    @Transactional
+    public void payment(String invoiceId) {
+        InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
+        paymentValidator.validate(invoice);
+        invoice.updateOrderStatus(OrderStatus.PAYMENT_COMPLETE);
+        invoiceRepository.save(invoice);
     }
 }
