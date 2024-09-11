@@ -11,37 +11,43 @@ import java.io.Serializable;
 @Setter
 public class ResultResponse<T> implements Serializable {
     private boolean success;
-
+    private HttpStatus status;
     private String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private PageResponse links;
+    private LinksResponse links;
 
     public ResultResponse() {
         this.success = true;
+        this.status = HttpStatus.OK;
         this.message = "success";
     }
 
     public ResultResponse(T data) {
         this.success = true;
-        this.message = "success";
+        this.status = HttpStatus.OK;
+        this.message = "Success";
         this.data = data;
     }
 
-    public ResultResponse(String message) {
+    public ResultResponse(T data, LinksResponse links) {
         this.success = true;
-        this.message = message;
+        this.status = HttpStatus.OK;
+        this.message = "Success to search invoices";
+        this.data = data;
+        this.links = links;
     }
 
-    public ResultResponse(boolean status, String message) {
+    public ResultResponse(boolean status, HttpStatus httpStatus, String message) {
         this.success = status;
+        this.status = httpStatus;
         this.message = message;
     }
 
-    public T getResult() {
+    public T getData() {
         return data;
     }
 }

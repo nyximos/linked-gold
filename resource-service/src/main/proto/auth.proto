@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package com.nyximos.auth;
+
+service AuthService {
+  rpc CreateToken (TokenRequest) returns (TokenResponse);
+  rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+  rpc ReIssueToken (ReIssueTokenRequest) returns (TokenResponse);
+
+}
+
+message TokenRequest {
+  int64 id = 1;
+  string username = 2;
+}
+
+message TokenResponse {
+  string accessToken = 1;
+  string refreshToken = 2;
+}
+
+message ValidateTokenRequest {
+  string accessToken = 1;
+}
+
+message ValidateTokenResponse {
+  int64 id = 1;
+  string username = 2;
+}
+
+message ReIssueTokenRequest {
+  string refreshToken = 1;
+}
