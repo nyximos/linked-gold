@@ -66,4 +66,12 @@ public class InvoiceService {
         invoice.updateOrderStatus(OrderStatus.ORDER_CANCEL);
         invoiceRepository.save(invoice);
     }
+
+    @Transactional
+    public void refund(String invoiceId) {
+        InvoiceEntity invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new InvoiceNotFoundException());
+        cancelValidator.validate(invoice.getOrderStatus());
+        invoice.updateOrderStatus(OrderStatus.REFUNDED);
+        invoiceRepository.save(invoice);
+    }
 }
