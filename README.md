@@ -8,6 +8,7 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
 거래와 관련된 모든 기능을 담당하는 resource service, 인증과 관련된 기능을 처리하는 auth service로 이루어져있습니다.
 <br>
 <br>
+
 ### 목차
 
 [1. 개발 환경](#1-개발-환경)
@@ -21,7 +22,7 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
 [5. 데이터베이스](#5-데이터베이스)
 
 [6. 프로젝트 구조](#6-프로젝트-구조)
-<br>
+<br><br>
 
 # 1. 개발 환경
 
@@ -36,7 +37,7 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
     - http://localhost:9999/swagger-ui/index.html
 - Auth Service
     - http://localhost:8888
-<br>
+<br><br>
 
 # **2. 기능**
 
@@ -60,6 +61,7 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
 - main : 배포 단계
 - develop : 개발 단계
 - feat : 기능 단위
+<br><br>
 
 **Commit**
 
@@ -114,13 +116,14 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
     DB_USERNAME=
     DB_PASSWORD=
     ```
+<br>
 
 **Setting Up Redis with Docker**
 ```
 docker run --name redis -p 6379:6379 -d redis:latest
 docker exec -it redis redis-cli
 ```
-
+<br>
 
 **Clone the Repository**
 
@@ -134,6 +137,7 @@ cd linked-gold
 ```
 ./gradlew build
 ```
+<br>
 
 **Run the Application**
 
@@ -148,10 +152,8 @@ cd linked-gold
 
 <img width="817" alt="image" src="https://github.com/user-attachments/assets/e6fd0ed5-5ef6-4709-a98f-32ae2f4426a9">
 <br>
-<br>
 
 # 6. 프로젝트 구조
-
 ```jsx
 ├── README.md
 ├── auth-service
