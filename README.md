@@ -6,7 +6,8 @@ Linked-Gold는 금 거래를 전문으로 하는 플랫폼으로,
 Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해 두 개의 독립적인 서버를 구현하고 있습니다.
 
 거래와 관련된 모든 기능을 담당하는 resource service, 인증과 관련된 기능을 처리하는 auth service로 이루어져있습니다.
-
+<br>
+<br>
 ### 목차
 
 [1. 개발 환경](#1-개발-환경)
@@ -20,9 +21,7 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
 [5. 데이터베이스](#5-데이터베이스)
 
 [6. 프로젝트 구조](#6-프로젝트-구조)
-
-
-
+<br>
 
 # 1. 개발 환경
 
@@ -37,8 +36,7 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
     - http://localhost:9999/swagger-ui/index.html
 - Auth Service
     - http://localhost:8888
-
-
+<br>
 
 # **2. 기능**
 
@@ -53,8 +51,7 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
 | 7 | PUT | localhost:9999/apis/invoices/shipment | ✔️ | 주문 배송 처리 |
 | 8 | PUT | localhost:9999/apis/invoices/cancel | ✔️ | 주문 취소 |
 | 9 | GET | localhost:9999/apis/invoices | ✔️ | 주문 목록 조회 |
-
-
+<br>
 
 # 3. 브랜치 전략
 
@@ -74,8 +71,7 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
 | docs | 문서 수정 |
 | remove | 파일을 삭제 |
 | comment | 주석 추가 및 변경 |
-
-
+<br>
 
 # **4. Getting Started**
 
@@ -142,16 +138,17 @@ cd linked-gold
 **Run the Application**
 
 `./gradlew bootRun`
-
-
+<br>
+<br>
 
 # **5. 데이터베이스**
 
 [DB Diagram](https://dbdiagram.io/d/linkd-gold-66e1a0646dde7f4149c789f7)
+<br>
+
 <img width="817" alt="image" src="https://github.com/user-attachments/assets/e6fd0ed5-5ef6-4709-a98f-32ae2f4426a9">
-
-
-
+<br>
+<br>
 
 # 6. 프로젝트 구조
 
