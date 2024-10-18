@@ -1,4 +1,9 @@
 # linked-gold
+<img src="https://github.com/user-attachments/assets/c6b17da3-e7f1-415a-8416-c593ff68d27d" alt="linked-gold" width="500"/>
+
+<br>
+<br>
+
 Linked-Gold는 금 거래를 전문으로 하는 플랫폼으로,
 
 사용자에게 금의 구매 및 판매를 지원하는 서비스를 제공합니다.
