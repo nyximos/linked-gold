@@ -1,20 +1,19 @@
-name: Deploy Auth Service
+name: Build and Deploy auth-service to AWS EC2
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: [ "main", "develop" ]
 
 env:
+  PROJECT_NAME: linked-gold
   SERVICE_NAME: auth-service
   BUCKET_NAME: linked-gold-bucket
-  S3_ZIP_NAME: auth-service.zip
-  CODE_DEPLOY_APP_NAME: linked-gold
+  CODE_DEPLOY_APP_NAME: linked-gold-auth
   DEPLOYMENT_GROUP_NAME: linked-gold-auth-deployment-group
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     
@@ -30,7 +29,7 @@ jobs:
       run: cd ${{ env.SERVICE_NAME }} && ./gradlew clean build -x test
       
     - name: Zip Auth Service
-      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.S3_ZIP_NAME }} build/
+      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -40,7 +39,4 @@ jobs:
         aws-region: ap-northeast-2
 
     - name: Upload to S3
-      run: aws s3 cp $GITHUB_WORKSPACE/${{ env.S3_ZIP_NAME }} s3://$BUCKET_NAME/$SERVICE_NAME/${{ env.S3_ZIP_NAME }}
-
-    - name: Code Deploy
-      run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$SERVICE_NAME/${{ env.S3_ZIP_NAME }}
+      run: aws s3 cp $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip s3://$BUCKET_NAME/$PROJECT_NAME/${{ env.SERVICE_NAME }}.zip
