@@ -6,6 +6,7 @@ on:
 
 env:
   PROJECT_NAME: auth-service
+  SERVICE_NAME: auth-service
   BUCKET_NAME: linked-gold-bucket
   CODE_DEPLOY_APP_NAME: auth-service
   DEPLOYMENT_GROUP_NAME: auth-service-deployment-group
