@@ -1,8 +1,8 @@
-name: Build and Deploy for WOWMATE server to AWS EC2
+name: Build and Deploy for linked-gold server to AWS EC2
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ "main", "develop" ]
 
 env:
   PROJECT_NAME: Linked-Gold_Server
