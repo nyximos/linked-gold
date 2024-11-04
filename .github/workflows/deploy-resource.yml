@@ -1,14 +1,16 @@
 name: Build and Deploy auth-service to AWS EC2
 
+
 on:
   push:
     branches: [ "main", "develop" ]
 
 env:
-  PROJECT_NAME: resource-service
+  PROJECT_NAME: linked-gold
+  SERVICE_NAME: resource-service
   BUCKET_NAME: linked-gold-bucket
-  CODE_DEPLOY_APP_NAME: resource-service
-  DEPLOYMENT_GROUP_NAME: resource-service-deployment-group
+  CODE_DEPLOY_APP_NAME: linked-gold-resource
+  DEPLOYMENT_GROUP_NAME: linked-gold-resource-deployment-group
 
 jobs:
   build:
@@ -25,22 +27,21 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     
-    - name: Build with Gradle
-      run: ./gradlew clean build -x test
-
-    - name: Make Zip File
-      run: zip -qq -r $GITHUB_WORKSPACE/$GITHUB_SHA.zip .
-      shell: bash
+    - name: Build Resource Service
+      run: cd ${{ env.SERVICE_NAME }} && ./gradlew clean build -x test
       
+    - name: Zip Resource Service
+      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar
+    
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
-      
-    - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 $GITHUB_WORKSPACE/$GITHUB_SHA.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
 
-    - name: Code Deploy
-      run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
+    - name: Upload to S3
+      run: aws s3 cp $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip s3://$BUCKET_NAME/$PROJECT_NAME/${{ env.SERVICE_NAME }}.zip
+
+    - name: Deploy via CodeDeploy
+      run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/${{ env.SERVICE_NAME }}.zip
