@@ -1,3 +1,4 @@
+# stop.sh
 
 PROJECT_ROOT="/home/ec2-user/app"
 JAR_FILE="$PROJECT_ROOT/server-0.0.1-SNAPSHOT.jar"
