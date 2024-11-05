@@ -33,7 +33,7 @@ jobs:
       run: chmod +x scripts/*.sh 
       
     - name: Zip Auth Service
-      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar ../appspec.yml
+      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar scripts/*.sh
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
