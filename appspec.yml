@@ -6,23 +6,23 @@ files:
 
 hooks:
   BeforeInstall:
-    - location: scripts/stop.sh
+    - location: script/stop.sh
       timeout: 60
       runas: ec2-user
       args: ["auth-service"]
 
-    - location: scripts/stop.sh
+    - location: script/stop.sh
       timeout: 60
       runas: ec2-user
       args: ["resource-service"]
 
   AfterInstall:
-    - location: scripts/start.sh
+    - location: script/start.sh
       timeout: 60
       runas: ec2-user
       args: ["auth-service"]
 
-    - location: scripts/start.sh
+    - location: script/start.sh
       timeout: 60
       runas: ec2-user
       args: ["resource-service"]

@@ -9,7 +9,7 @@ env:
   SERVICE_NAME: resource-service
   BUCKET_NAME: linked-gold-bucket
   CODE_DEPLOY_APP_NAME: linked-gold-resource
-  DEPLOYMENT_GROUP_NAME: linked-gold-resource-deployment-group
+  DEPLOYMENT_GROUP_NAME: resource-service-deployment-group
 
 jobs:
   build:
@@ -31,7 +31,8 @@ jobs:
       run: cd ${{ env.SERVICE_NAME }} && ./gradlew clean build -x test
       
     - name: Zip Resource Service
-      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar
+      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar ../appspec.yml
+
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1

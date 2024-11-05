@@ -9,7 +9,7 @@ env:
   SERVICE_NAME: auth-service
   BUCKET_NAME: linked-gold-bucket
   CODE_DEPLOY_APP_NAME: linked-gold-auth
-  DEPLOYMENT_GROUP_NAME: linked-gold-auth-deployment-group
+  DEPLOYMENT_GROUP_NAME: auth-service-deployment-group
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
       run: cd ${{ env.SERVICE_NAME }} && ./gradlew clean build -x test
       
     - name: Zip Auth Service
-      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar
+      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar ../appspec.yml
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
