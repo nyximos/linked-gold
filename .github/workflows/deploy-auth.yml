@@ -35,7 +35,7 @@ jobs:
     - name: Zip Auth Service
       run: |
         cd ${{ env.SERVICE_NAME }} 
-        zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar ../scripts/*.sh ../appspec.yml
+        zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar ../scripts/*.sh appspec.yml
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
