@@ -40,6 +40,12 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
 
+    - name: Set Environment Variables
+      run: |
+        echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
+        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+
     - name: Upload to S3
       run: aws s3 cp $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip s3://$BUCKET_NAME/$PROJECT_NAME/${{ env.SERVICE_NAME }}.zip
 
