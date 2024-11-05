@@ -30,7 +30,7 @@ jobs:
       run: cd ${{ env.SERVICE_NAME }} && ./gradlew clean build -x test
       
     - name: Zip Auth Service
-      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar
+      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar ../appspec.yml
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
