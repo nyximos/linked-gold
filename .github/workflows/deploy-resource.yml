@@ -1,4 +1,4 @@
-name: Build and Deploy auth-service to AWS EC2
+name: Build and Deploy resource-service to AWS EC2
 
 on:
   push:
