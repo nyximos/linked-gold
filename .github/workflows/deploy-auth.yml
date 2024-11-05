@@ -38,5 +38,17 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
 
+    - name: Set Environment Variables
+      run: |
+        echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
+        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+        echo "JWT_KEY=${{ secrets.JWT_KEY }}" >> $GITHUB_ENV
+        echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> $GITHUB_ENV
+        echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> $GITHUB_ENV
+
     - name: Upload to S3
       run: aws s3 cp $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip s3://$BUCKET_NAME/$PROJECT_NAME/${{ env.SERVICE_NAME }}.zip
+      
+    - name: Deploy via CodeDeploy
+      run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/${{ env.SERVICE_NAME }}.zip
