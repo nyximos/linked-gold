@@ -9,7 +9,7 @@ env:
   SERVICE_NAME: resource-service
   BUCKET_NAME: linked-gold-bucket
   CODE_DEPLOY_APP_NAME: linked-gold-resource
-  DEPLOYMENT_GROUP_NAME: linked-gold-resource-deployment-group
+  DEPLOYMENT_GROUP_NAME: resource-service-deployment-group
 
 jobs:
   build:

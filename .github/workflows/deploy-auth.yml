@@ -9,7 +9,7 @@ env:
   SERVICE_NAME: auth-service
   BUCKET_NAME: linked-gold-bucket
   CODE_DEPLOY_APP_NAME: linked-gold-auth
-  DEPLOYMENT_GROUP_NAME: linked-gold-auth-deployment-group
+  DEPLOYMENT_GROUP_NAME: auth-service-deployment-group
 
 jobs:
   build:
