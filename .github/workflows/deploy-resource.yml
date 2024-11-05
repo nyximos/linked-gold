@@ -1,0 +1,53 @@
+name: Build and Deploy auth-service to AWS EC2
+
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+
+env:
+  PROJECT_NAME: linked-gold
+  SERVICE_NAME: resource-service
+  BUCKET_NAME: linked-gold-bucket
+  CODE_DEPLOY_APP_NAME: linked-gold-resource
+  DEPLOYMENT_GROUP_NAME: linked-gold-resource-deployment-group
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: 21
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Build Resource Service
+      run: cd ${{ env.SERVICE_NAME }} && ./gradlew clean build -x test
+      
+    - name: Zip Resource Service
+      run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Set Environment Variables
+      run: |
+        echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
+        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+
+    - name: Upload to S3
+      run: aws s3 cp $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip s3://$BUCKET_NAME/$PROJECT_NAME/${{ env.SERVICE_NAME }}.zip
+
+    - name: Deploy via CodeDeploy
+      run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/${{ env.SERVICE_NAME }}.zip
