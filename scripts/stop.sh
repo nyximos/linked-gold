@@ -18,6 +18,14 @@ fi
 # 현재 실행 중인 애플리케이션 PID 확인 후 종료
 CURRENT_PID=$(pgrep -f $JAR_FILE)
 
+# 기존 파일 삭제
+if [ -d "$PROJECT_ROOT" ]; then
+  echo "$TIME_NOW > Deleting existing files in $PROJECT_ROOT" >> $DEPLOY_LOG
+  rm -rf "$PROJECT_ROOT"/*
+else
+  echo "$TIME_NOW > Directory $PROJECT_ROOT does not exist." >> $DEPLOY_LOG
+fi
+
 if [ -z "$CURRENT_PID" ]; then
   echo "$TIME_NOW > $SERVICE_NAME is not running." >> $DEPLOY_LOG
 else
