@@ -28,6 +28,9 @@ jobs:
     
     - name: Build Auth Service
       run: cd ${{ env.SERVICE_NAME }} && ./gradlew clean build -x test
+
+    - name: Grant execute permission for deployment scripts
+      run: chmod +x scripts/*.sh
       
     - name: Zip Auth Service
       run: cd ${{ env.SERVICE_NAME }} && zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar ../appspec.yml
