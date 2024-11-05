@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/linked-gold/resource-service
+
+hooks:
+  BeforeInstall:
+    - location: scripts/stop.sh
+      timeout: 60
+      runas: ec2-user
+      args: ["resource-service"]
+
+  AfterInstall:
+    - location: scripts/start.sh
+      timeout: 60
+      runas: ec2-user
+      args: ["resource-service"]
