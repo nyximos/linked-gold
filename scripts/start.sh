@@ -4,9 +4,9 @@ SERVICE_NAME=$1
 PROJECT_ROOT="/home/ec2-user/linked-gold/$SERVICE_NAME"
 JAR_FILE="$PROJECT_ROOT/build/libs/$SERVICE_NAME-0.0.1-SNAPSHOT.jar"
 
-APP_LOG="$PROJECT_ROOT/application.log"
-ERROR_LOG="$PROJECT_ROOT/error.log"
-DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
+APP_LOG="$PROJECT_ROOT/$SERVICE_NAME.application.log"
+ERROR_LOG="$PROJECT_ROOT/$SERVICE_NAME.error.log"
+DEPLOY_LOG="$PROJECT_ROOT/$SERVICE_NAME.deploy.log"
 
 # 디렉토리가 없으면 생성
 mkdir -p "$PROJECT_ROOT"
