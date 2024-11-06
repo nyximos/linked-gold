@@ -8,6 +8,14 @@ APP_LOG="$PROJECT_ROOT/application.log"
 ERROR_LOG="$PROJECT_ROOT/error.log"
 DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
+# 디렉토리가 없으면 생성
+mkdir -p "$PROJECT_ROOT"
+
+# 로그 파일이 존재하지 않으면 생성
+if [ ! -f "$DEPLOY_LOG" ]; then
+  touch "$DEPLOY_LOG"
+fi
+
 TIME_NOW=$(date '+%Y-%m-%d %H:%M:%S')
 
 # JAR 파일 실행
