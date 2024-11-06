@@ -11,6 +11,9 @@ DEPLOY_LOG="$PROJECT_ROOT/$SERVICE_NAME.deploy.log"
 # 디렉토리가 없으면 생성
 mkdir -p "$PROJECT_ROOT"
 
+# 서비스 디렉토리로 이동
+cd "$PROJECT_ROOT"
+
 # 로그 파일이 존재하지 않으면 생성
 if [ ! -f "$DEPLOY_LOG" ]; then
   touch "$DEPLOY_LOG"
