@@ -9,10 +9,7 @@ hooks:
     - location: scripts/stop.sh
       timeout: 60
       runas: ec2-user
-      args: ["auth-service"]
-
   AfterInstall:
     - location: scripts/start.sh
       timeout: 60
       runas: ec2-user
-      args: ["auth-service"]

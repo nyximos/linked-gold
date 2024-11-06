@@ -1,8 +1,7 @@
 #!/bin/bash
 
-SERVICE_NAME=$1
-PROJECT_ROOT="/home/ec2-user/linked-gold/$SERVICE_NAME"
-JAR_FILE="$PROJECT_ROOT/build/libs/$SERVICE_NAME-0.0.1-SNAPSHOT.jar"
+PROJECT_ROOT="/home/ec2-user/linked-gold/resource-service"
+JAR_FILE="$PROJECT_ROOT/build/libs/resource-service-0.0.1-SNAPSHOT.jar"
 
 # 디렉토리가 없으면 생성
 mkdir -p "$PROJECT_ROOT"
@@ -27,9 +26,9 @@ else
 fi
 
 if [ -z "$CURRENT_PID" ]; then
-  echo "$TIME_NOW > $SERVICE_NAME is not running." >> $DEPLOY_LOG
+  echo "$TIME_NOW > Resource-service is not running." >> $DEPLOY_LOG
 else
-  echo "$TIME_NOW > Stopping $SERVICE_NAME with PID $CURRENT_PID" >> $DEPLOY_LOG
+  echo "$TIME_NOW > Stopping resource-service with PID $CURRENT_PID" >> $DEPLOY_LOG
   kill -15 $CURRENT_PID
-  echo "$TIME_NOW > $SERVICE_NAME stopped." >> $DEPLOY_LOG
+  echo "$TIME_NOW > Resource-service stopped." >> $DEPLOY_LOG
 fi
