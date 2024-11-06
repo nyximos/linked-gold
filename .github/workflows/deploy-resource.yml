@@ -38,7 +38,7 @@ jobs:
         cd ${{ env.SERVICE_NAME }} 
         zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip \
         build/libs/*.jar \
-        ../scripts/*.sh \
+        scripts/*.sh \
         appspec.yml \
         src/main/resources/application.yml
     
