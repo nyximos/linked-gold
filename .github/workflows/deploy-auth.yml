@@ -30,7 +30,7 @@ jobs:
       run: cd ${{ env.SERVICE_NAME }} && ./gradlew clean build -x test
       
     - name: Grant execute permission for deployment scripts
-      run: chmod +x scripts/*.sh 
+      run: chmod +x ${{ env.SERVICE_NAME }}/scripts/*.sh
       
     - name: Zip Auth Service
       run: |
@@ -40,7 +40,7 @@ jobs:
         scripts/*.sh \
         appspec.yml \
         src/main/resources/application.yml
-        
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
