@@ -35,7 +35,7 @@ jobs:
     - name: Zip Auth Service
       run: |
         cd ${{ env.SERVICE_NAME }} 
-        zip -qq -r $GITHUB_WORKSPACE/auth-service.zip \
+        zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip \
         build/libs/*.jar \
         ../scripts/*.sh \
         appspec.yml \
