@@ -38,7 +38,7 @@ jobs:
         mkdir -p ${{ env.SERVICE_NAME }}/src/main/resources
         echo "${{ secrets.APPLICATION_RESOURCE_YML }}" > ${{ env.SERVICE_NAME }}/src/main/resources/application.yml
 
-    - name: Zip Auth Service
+    - name: Zip Resource Service
       run: |
         cd ${{ env.SERVICE_NAME }} 
         zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip \
