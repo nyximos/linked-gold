@@ -50,9 +50,6 @@ jobs:
 
     - name: Set Environment Variables
       run: |
-        echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
-        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
         echo "JWT_KEY=${{ secrets.JWT_KEY }}" >> $GITHUB_ENV
         echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> $GITHUB_ENV
         echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> $GITHUB_ENV

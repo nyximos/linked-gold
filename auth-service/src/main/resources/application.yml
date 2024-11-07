@@ -8,12 +8,6 @@ grpc:
 spring:
   application:
     name: auth-service
-
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: create
