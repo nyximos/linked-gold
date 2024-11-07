@@ -38,6 +38,9 @@ jobs:
         mkdir -p ${{ env.SERVICE_NAME }}/src/main/resources
         echo "${{ secrets.APPLICATION_RESOURCE_YML }}" > ${{ env.SERVICE_NAME }}/src/main/resources/application.yml
 
+    - name: Check application.yml content
+      run: cat ${{ env.SERVICE_NAME }}/src/main/resources/application.yml
+
     - name: Zip Resource Service
       run: |
         cd ${{ env.SERVICE_NAME }} 
