@@ -44,3 +44,5 @@ out/
 
 ### Environment ###
 .env
+/auth-service/src/main/resources/application.yml
+/resource-service/src/main/resources/application.yml
