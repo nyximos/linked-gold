@@ -35,8 +35,10 @@ jobs:
 
     - name: Create application.yml
       run: |
-        mkdir -p ${{ env.SERVICE_NAME }}/src/main/resources
-        echo -e "${{ secrets.APPLICATION_RESOURCE_YML }}" > ${{ env.SERVICE_NAME }}/src/main/resources/application.yml
+        mkdir ${{ env.SERVICE_NAME }}/src/main/resources
+        cd ./src/main/resources
+        touch ./application.yml
+        echo "${{ secrets.APPLICATION_RESOURCE_YML }}" > ./application.yml
 
     - name: Check application.yml content
       run: cat ${{ env.SERVICE_NAME }}/src/main/resources/application.yml
