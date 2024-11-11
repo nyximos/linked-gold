@@ -20,22 +20,34 @@ jobs:
     - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
-        java-version: 21
+        java-version: '21'
         distribution: 'temurin'
     
     - name: Grant execute permission for gradlew
       run: chmod +x ${{ env.SERVICE_NAME }}/gradlew
-    
+
+    - name: Create application.yml
+      run: |
+        mkdir -p ${{ env.SERVICE_NAME }}/src/main/resources
+        echo "${{ secrets.APPLICATION_AUTH_YML }}" > ${{ env.SERVICE_NAME }}/src/main/resources/application.yml
+
     - name: Build Auth Service
       run: cd ${{ env.SERVICE_NAME }} && ./gradlew clean build -x test
 
     - name: Grant execute permission for deployment scripts
-      run: chmod +x scripts/*.sh
-      
+      run: chmod +x ${{ env.SERVICE_NAME }}/scripts/*.sh
+
+    - name: Check application.yml content
+      run: cat ${{ env.SERVICE_NAME }}/src/main/resources/application.yml
+
     - name: Zip Auth Service
       run: |
         cd ${{ env.SERVICE_NAME }} 
-        zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip build/libs/*.jar scripts/*.sh appspec.yml
+        zip -qq -r $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip \
+        build/libs/*.jar \
+        scripts/*.sh \
+        appspec.yml \
+        src/main/resources/application.yml
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -43,15 +55,6 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
-
-    - name: Set Environment Variables
-      run: |
-        echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
-        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-        echo "JWT_KEY=${{ secrets.JWT_KEY }}" >> $GITHUB_ENV
-        echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> $GITHUB_ENV
-        echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> $GITHUB_ENV
 
     - name: Upload to S3
       run: aws s3 cp $GITHUB_WORKSPACE/${{ env.SERVICE_NAME }}.zip s3://$BUCKET_NAME/$PROJECT_NAME/${{ env.SERVICE_NAME }}.zip
