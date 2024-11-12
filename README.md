@@ -26,9 +26,9 @@ Linked-Gold는 효율적이고 확장 가능한 시스템을 구축하기 위해
 
 [5. 데이터베이스](#5-데이터베이스)
 
-[6. 프로젝트 구조](#6-프로젝트-구조)
+[6. 서비스 아키텍처](#6-서비스-아키텍처)
 
-[7. 서비스 아키텍처](#7-서비스-아키텍처)
+[7. 프로젝트 구조](#7-프로젝트-구조)
 
 <br><br>
 
@@ -161,7 +161,10 @@ cd linked-gold
 <img width="817" alt="image" src="https://github.com/user-attachments/assets/e6fd0ed5-5ef6-4709-a98f-32ae2f4426a9">
 <br>
 
-# 6. 프로젝트 구조
+# 6. 서비스 아키텍처
+<img width="909" alt="아키텍처" src="https://github.com/user-attachments/assets/d1105558-77ab-4f85-a8fb-ee2fa9c24d70">
+
+# 7. 프로젝트 구조
 ```jsx
 ├── README.md
 ├── auth-service
@@ -339,5 +342,3 @@ cd linked-gold
                         └── ResourceServiceApplicationTests.java
 ```
 
-# 7. 서비스 아키텍처
-<img width="909" alt="아키텍처" src="https://github.com/user-attachments/assets/d1105558-77ab-4f85-a8fb-ee2fa9c24d70">
